@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.define "Ubuntu" do |vm1| 
+    vm1.vm.hostname="Ubuntu"
+    vm1.vm.box = "ubuntu/bionic64"
+    vm1.vm.network "forwarded_port", guest: 80, host: 8080
+
+    vm1.vm.provider "virtulbox" do |vb|
+      vb.name="Ubuntu"
+      vb.gui = false
+      vb.memory= "1024"
+    end
+
+    vm1.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y apache2
+      echo "Hello from Ubuntu. Apache is running..."
+    SHELL
+  end
+
+
+  config.vm.define "Centos" do |vm2| 
+    vm2.vm.hostname="Centos"
+    vm2.vm.box = "centos/7"
+    vm2.vm.network "forwarded_port", guest: 80, host: 8080
+
+    vm2.vm.provider "virtulbox" do |vb|
+      vb.name="Centos"
+      vb.gui = false
+      vb.memory= "1024"
+    end
+
+    vm2.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y apache2
+      echo "Hello from Centos. Apache is running..."
+    SHELL
+  end
+
+end
